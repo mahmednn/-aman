@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "457125924173",
+    "project_id": "tarahal-app",
+    "storage_bucket": "tarahal-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:457125924173:android:e49be1dce95addb8d9fb04",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_11"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAeDW_zr6tDjBVYzmxkgwxsHgsiNWYiR4E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:457125924173:android:cb6c393189e3e3e8d9fb04",
+        "android_client_info": {
+          "package_name": "com.tarhal.customer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAeDW_zr6tDjBVYzmxkgwxsHgsiNWYiR4E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

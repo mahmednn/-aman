@@ -1,0 +1,19 @@
+Analyzing 3 items...                                            
+
+   info - The private field _selectedPoints could be 'final' - lib\presentation_layer\screens\auth\map_selection_screen.dart:21:30 - prefer_final_fields
+   info - 'desiredAccuracy' is deprecated and shouldn't be used. use settings parameter with AndroidSettings, AppleSettings, WebSettings, or LocationSettings - lib\presentation_layer\screens\auth\map_selection_screen.dart:221:9 - deprecated_member_use
+   info - Don't invoke 'print' in production code - lib\presentation_layer\screens\auth\map_selection_screen.dart:272:11 - avoid_print
+   info - Don't invoke 'print' in production code - lib\presentation_layer\screens\auth\map_selection_screen.dart:274:13 - avoid_print
+   info - Don't invoke 'print' in production code - lib\presentation_layer\screens\auth\map_selection_screen.dart:280:13 - avoid_print
+   info - 'desiredAccuracy' is deprecated and shouldn't be used. use settings parameter with AndroidSettings, AppleSettings, WebSettings, or LocationSettings - lib\presentation_layer\screens\auth\map_selection_screen.dart:397:33 - deprecated_member_use
+   info - Don't use 'BuildContext's across async gaps, guarded by an unrelated 'mounted' check - lib\presentation_layer\screens\auth\map_selection_screen.dart:433:54 - use_build_context_synchronously
+   info - Don't invoke 'print' in production code - lib\presentation_layer\screens\auth\map_selection_screen.dart:501:37 - avoid_print
+   info - Don't invoke 'print' in production code - lib\presentation_layer\screens\auth\map_selection_screen.dart:515:39 - avoid_print
+   info - Don't invoke 'print' in production code - lib\presentation_layer\screens\auth\map_selection_screen.dart:537:35 - avoid_print
+   info - Don't invoke 'print' in production code - lib\presentation_layer\screens\auth\profile_screen.dart:36:9 - avoid_print
+   info - Don't invoke 'print' in production code - lib\presentation_layer\screens\home_screen.dart:43:5 - avoid_print
+   info - Don't invoke 'print' in production code - lib\presentation_layer\screens\home_screen.dart:62:7 - avoid_print
+   info - Use interpolation to compose strings and values - lib\presentation_layer\screens\home_screen.dart:93:23 - prefer_interpolation_to_compose_strings
+   info - Don't use 'BuildContext's across async gaps, guarded by an unrelated 'mounted' check - lib\presentation_layer\screens\home_screen.dart:127:23 - use_build_context_synchronously
+   info - Don't invoke 'print' in production code - lib\presentation_layer\screens\home_screen.dart:200:11 - avoid_print
+

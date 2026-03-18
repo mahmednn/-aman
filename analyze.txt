@@ -1,0 +1,96 @@
+Analyzing aman_bloc_Copy...
+
+  error - lib\presentation_layer\screens\category_details_screen.dart:42:36 - The method 'loadSuppliers' isn't defined for the type 'SuppliersCubit'. Try correcting the name to the name of an existing method, or defining a method named 'loadSuppliers'. - undefined_method
+  error - lib\presentation_layer\screens\home_screen.dart:44:18 - The name 'SuppliersCubit' isn't a type, so it can't be used as a type argument. Try correcting the name to an existing type, or defining a type named 'SuppliersCubit'. - non_type_as_type_argument
+  error - lib\presentation_layer\screens\home_screen.dart:91:31 - The name 'CartCubit' isn't a type, so it can't be used as a type argument. Try correcting the name to an existing type, or defining a type named 'CartCubit'. - non_type_as_type_argument
+  error - lib\presentation_layer\screens\home_screen.dart:92:24 - The name 'CartScreen' isn't a class. Try correcting the name to match an existing class. - creation_with_non_type
+  error - lib\presentation_layer\screens\home_screen.dart:109:26 - The name 'SuppliersCubit' isn't a type, so it can't be used as a type argument. Try correcting the name to an existing type, or defining a type named 'SuppliersCubit'. - non_type_as_type_argument
+  error - lib\presentation_layer\screens\home_screen.dart:109:42 - The name 'SuppliersState' isn't a type, so it can't be used as a type argument. Try correcting the name to an existing type, or defining a type named 'SuppliersState'. - non_type_as_type_argument
+  error - lib\presentation_layer\screens\home_screen.dart:112:32 - The name 'SuppliersLoading' isn't defined, so it can't be used in an 'is' expression. Try changing the name to the name of an existing type, or creating a type with the name 'SuppliersLoading'. - type_test_with_undefined_name
+  error - lib\presentation_layer\screens\home_screen.dart:113:32 - The name 'SuppliersInitial' isn't defined, so it can't be used in an 'is' expression. Try changing the name to the name of an existing type, or creating a type with the name 'SuppliersInitial'. - type_test_with_undefined_name
+  error - lib\presentation_layer\screens\home_screen.dart:171:39 - The name 'SuppliersLoaded' isn't defined, so it can't be used in an 'is' expression. Try changing the name to the name of an existing type, or creating a type with the name 'SuppliersLoaded'. - type_test_with_undefined_name
+  error - lib\presentation_layer\screens\home_screen.dart:172:45 - The property 'suppliers' can't be unconditionally accessed because the receiver can be 'null'. Try making the access conditional (using '?.') or adding a null check to the target ('!'). - unchecked_use_of_nullable_value
+  error - lib\presentation_layer\screens\home_screen.dart:245:39 - The name 'SuppliersError' isn't defined, so it can't be used in an 'is' expression. Try changing the name to the name of an existing type, or creating a type with the name 'SuppliersError'. - type_test_with_undefined_name
+  error - lib\presentation_layer\screens\home_screen.dart:247:46 - The property 'error' can't be unconditionally accessed because the receiver can be 'null'. Try making the access conditional (using '?.') or adding a null check to the target ('!'). - unchecked_use_of_nullable_value
+  error - lib\presentation_layer\screens\home_screen.dart:439:10 - The name 'SupplierModel' isn't a type, so it can't be used as a type argument. Try correcting the name to an existing type, or defining a type named 'SupplierModel'. - non_type_as_type_argument
+  error - lib\presentation_layer\screens\home_screen.dart:469:56 - The name 'SuppliersCubit' isn't a type, so it can't be used as a type argument. Try correcting the name to an existing type, or defining a type named 'SuppliersCubit'. - non_type_as_type_argument
+  error - lib\presentation_layer\screens\home_screen.dart:626:34 - The name 'SupplierModel' isn't a type, so it can't be used as a type argument. Try correcting the name to an existing type, or defining a type named 'SupplierModel'. - non_type_as_type_argument
+warning - lib\presentation_layer\screens\category_details_screen.dart:2:8 - Duplicate import. Try removing all but one import of the library. - duplicate_import
+warning - lib\presentation_layer\screens\category_details_screen.dart:31:8 - The value of the field '_isDisposed' isn't used. Try removing the field, or using it. - unused_field
+warning - lib\presentation_layer\screens\category_details_screen.dart:32:28 - The value of the field '_cartItems' isn't used. Try removing the field, or using it. - unused_field
+warning - lib\presentation_layer\screens\home_screen.dart:112:49 - Dead code. Try removing the code, or fixing the code before it so that it can be reached. - dead_code
+warning - lib\presentation_layer\screens\home_screen.dart:171:18 - Dead code. Try removing the code, or fixing the code before it so that it can be reached. - dead_code
+warning - lib\presentation_layer\screens\home_screen.dart:251:11 - Dead code. Try removing the code, or fixing the code before it so that it can be reached. - dead_code
+   info - lib\business_logic_layer\cubit\auth\auth_cubit.dart:48:9 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\business_logic_layer\cubit\auth\auth_cubit.dart:53:11 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\business_logic_layer\cubit\auth\auth_cubit.dart:56:11 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\business_logic_layer\cubit\auth\auth_cubit.dart:135:7 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\business_logic_layer\cubit\auth\auth_cubit.dart:169:9 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\business_logic_layer\cubit\auth\auth_cubit.dart:174:11 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\business_logic_layer\cubit\auth\auth_cubit.dart:210:5 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\business_logic_layer\cubit\auth\auth_cubit.dart:219:7 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\business_logic_layer\cubit\auth\auth_cubit.dart:228:7 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\business_logic_layer\cubit\suppliers_cubit.dart:15:5 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\business_logic_layer\cubit\suppliers_cubit.dart:19:7 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\business_logic_layer\cubit\suppliers_cubit.dart:23:7 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\data_layer\model\auth_model.dart:24:7 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\data_layer\model\auth_model.dart:62:5 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\data_layer\model\auth_model.dart:67:7 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\data_layer\model\auth_model.dart:79:7 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\data_layer\model\auth_model.dart:84:7 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\data_layer\model\auth_model.dart:87:7 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\data_layer\model\auth_model.dart:89:7 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\data_layer\model\auth_model.dart:99:9 - Statements in an if should be enclosed in a block. Try wrapping the statement in a block. - curly_braces_in_flow_control_structures
+   info - lib\data_layer\repository\location_repo.dart:102:7 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\data_layer\web_services\auth_services.dart:32:11 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\data_layer\web_services\auth_services.dart:35:13 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\data_layer\web_services\auth_services.dart:37:13 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\data_layer\web_services\auth_services.dart:43:13 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\data_layer\web_services\auth_services.dart:67:7 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\data_layer\web_services\auth_services.dart:182:7 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\data_layer\web_services\auth_services.dart:196:7 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\data_layer\web_services\auth_services.dart:198:7 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\data_layer\web_services\category_services.dart:21:5 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\data_layer\web_services\category_services.dart:22:5 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\data_layer\web_services\category_services.dart:27:7 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\data_layer\web_services\category_services.dart:30:9 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\data_layer\web_services\category_services.dart:35:11 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\data_layer\web_services\category_services.dart:41:7 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\data_layer\web_services\supplier_services.dart:21:5 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\data_layer\web_services\supplier_services.dart:22:5 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\data_layer\web_services\supplier_services.dart:23:5 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\data_layer\web_services\supplier_services.dart:28:7 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\data_layer\web_services\supplier_services.dart:31:9 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\data_layer\web_services\supplier_services.dart:35:11 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\data_layer\web_services\supplier_services.dart:41:7 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\presentation_layer\screens\auth\forgot_password_screen.dart:119:31 - Statements in an if should be enclosed in a block. Try wrapping the statement in a block. - curly_braces_in_flow_control_structures
+   info - lib\presentation_layer\screens\auth\map_selection_screen.dart:24:26 - The private field _selectedPoints could be 'final'. Try making the field 'final'. - prefer_final_fields
+   info - lib\presentation_layer\screens\auth\map_selection_screen.dart:68:11 - Statements in an if should be enclosed in a block. Try wrapping the statement in a block. - curly_braces_in_flow_control_structures
+   info - lib\presentation_layer\screens\auth\map_selection_screen.dart:70:11 - Statements in an if should be enclosed in a block. Try wrapping the statement in a block. - curly_braces_in_flow_control_structures
+   info - lib\presentation_layer\screens\auth\map_selection_screen.dart:72:11 - Statements in an if should be enclosed in a block. Try wrapping the statement in a block. - curly_braces_in_flow_control_structures
+   info - lib\presentation_layer\screens\auth\map_selection_screen.dart:308:9 - 'desiredAccuracy' is deprecated and shouldn't be used. use settings parameter with AndroidSettings, AppleSettings, WebSettings, or LocationSettings. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+   info - lib\presentation_layer\screens\auth\map_selection_screen.dart:514:37 - 'desiredAccuracy' is deprecated and shouldn't be used. use settings parameter with AndroidSettings, AppleSettings, WebSettings, or LocationSettings. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+   info - lib\presentation_layer\screens\auth\map_selection_screen.dart:569:54 - Don't use 'BuildContext's across async gaps, guarded by an unrelated 'mounted' check. Guard a 'State.context' use with a 'mounted' check on the State, and other BuildContext use with a 'mounted' check on the BuildContext. - use_build_context_synchronously
+   info - lib\presentation_layer\screens\auth\otp_verification_screen.dart:85:15 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\presentation_layer\screens\auth\otp_verification_screen.dart:149:31 - Statements in an if should be enclosed in a block. Try wrapping the statement in a block. - curly_braces_in_flow_control_structures
+   info - lib\presentation_layer\screens\auth\register_screen.dart:112:31 - Statements in an if should be enclosed in a block. Try wrapping the statement in a block. - curly_braces_in_flow_control_structures
+   info - lib\presentation_layer\screens\auth\register_screen.dart:123:31 - Statements in an if should be enclosed in a block. Try wrapping the statement in a block. - curly_braces_in_flow_control_structures
+   info - lib\presentation_layer\screens\auth\register_screen.dart:134:31 - Statements in an if should be enclosed in a block. Try wrapping the statement in a block. - curly_braces_in_flow_control_structures
+   info - lib\presentation_layer\screens\auth\register_screen.dart:145:31 - Statements in an if should be enclosed in a block. Try wrapping the statement in a block. - curly_braces_in_flow_control_structures
+   info - lib\presentation_layer\screens\auth\register_screen.dart:147:31 - Statements in an if should be enclosed in a block. Try wrapping the statement in a block. - curly_braces_in_flow_control_structures
+   info - lib\presentation_layer\screens\auth\register_screen.dart:158:31 - Statements in an if should be enclosed in a block. Try wrapping the statement in a block. - curly_braces_in_flow_control_structures
+   info - lib\presentation_layer\screens\auth\register_screen.dart:160:31 - Statements in an if should be enclosed in a block. Try wrapping the statement in a block. - curly_braces_in_flow_control_structures
+   info - lib\presentation_layer\screens\auth\reset_password_screen.dart:147:31 - Statements in an if should be enclosed in a block. Try wrapping the statement in a block. - curly_braces_in_flow_control_structures
+   info - lib\presentation_layer\screens\auth\reset_password_screen.dart:149:31 - Statements in an if should be enclosed in a block. Try wrapping the statement in a block. - curly_braces_in_flow_control_structures
+   info - lib\presentation_layer\screens\auth\reset_password_screen.dart:160:31 - Statements in an if should be enclosed in a block. Try wrapping the statement in a block. - curly_braces_in_flow_control_structures
+   info - lib\presentation_layer\screens\auth\reset_password_screen.dart:162:31 - Statements in an if should be enclosed in a block. Try wrapping the statement in a block. - curly_braces_in_flow_control_structures
+   info - lib\presentation_layer\screens\category_details_screen.dart:31:8 - The private field _isDisposed could be 'final'. Try making the field 'final'. - prefer_final_fields
+   info - lib\presentation_layer\screens\home_screen.dart:42:5 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\presentation_layer\screens\home_screen.dart:111:11 - Don't invoke 'print' in production code. Try using a logging framework. - avoid_print
+   info - lib\presentation_layer\screens\home_screen.dart:910:54 - Don't use 'BuildContext's across async gaps. Try rewriting the code to not use the 'BuildContext', or guard the use with a 'mounted' check. - use_build_context_synchronously
+   info - lib\presentation_layer\screens\home_screen.dart:911:35 - Statements in an if should be enclosed in a block. Try wrapping the statement in a block. - curly_braces_in_flow_control_structures
+   info - lib\presentation_layer\screens\home_screen.dart:911:49 - Don't use 'BuildContext's across async gaps. Try rewriting the code to not use the 'BuildContext', or guard the use with a 'mounted' check. - use_build_context_synchronously
+   info - lib\presentation_layer\screens\home_screen.dart:964:9 - Don't use 'BuildContext's across async gaps. Try rewriting the code to not use the 'BuildContext', or guard the use with a 'mounted' check. - use_build_context_synchronously
+   info - lib\presentation_layer\screens\supplier_screen.dart:31:13 - Statements in an if should be enclosed in a block. Try wrapping the statement in a block. - curly_braces_in_flow_control_structures
+
+92 issues found.

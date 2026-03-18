@@ -1,0 +1,10 @@
+Analyzing home_screen.dart...                                   
+
+   info - Don't invoke 'print' in production code - lib\presentation_layer\screens\home_screen.dart:39:5 - avoid_print
+   info - Don't invoke 'print' in production code - lib\presentation_layer\screens\home_screen.dart:94:11 - avoid_print
+  error - The name 'GeoPoint' isn't defined, so it can't be used in an 'is' expression - lib\presentation_layer\screens\home_screen.dart:273:47 - type_test_with_undefined_name
+  error - The getter 'latitude' isn't defined for the type 'Object' - lib\presentation_layer\screens\home_screen.dart:275:47 - undefined_getter
+  error - The getter 'longitude' isn't defined for the type 'Object' - lib\presentation_layer\screens\home_screen.dart:275:86 - undefined_getter
+  error - The getter 'latitude' isn't defined for the type 'Object' - lib\presentation_layer\screens\home_screen.dart:280:38 - undefined_getter
+  error - The getter 'longitude' isn't defined for the type 'Object' - lib\presentation_layer\screens\home_screen.dart:281:39 - undefined_getter
+
