@@ -1,3 +1,5 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 class CartModel {
   final int id;
   final int customerId;
@@ -44,8 +46,15 @@ class CartModel {
       createdAt: json['created_at']?.toString() ?? '',
       updatedAt: json['updated_at']?.toString() ?? '',
       notes: json['notes']?.toString(),
-      supplierLogo: json['supplier_logo']?.toString(),
+      supplierLogo: _parseLogo(json['supplier_logo']?.toString() ?? json['logo_url']?.toString()),
     );
+  }
+
+  static String? _parseLogo(String? logo) {
+    if (logo == null || logo.isEmpty) return null;
+    if (logo.startsWith('http')) return logo;
+    final storageBaseUrl = dotenv.env['STORAGE_BASE_URL'] ?? 'http://102.203.200.14/storage/';
+    return '$storageBaseUrl$logo';
   }
 }
 
@@ -84,7 +93,7 @@ class CartItemModel {
       productSupplierId: json['product_supplier_id'] is int ? json['product_supplier_id'] : int.tryParse(json['product_supplier_id']?.toString() ?? '0') ?? 0,
       productId: json['product_id'] is int ? json['product_id'] : int.tryParse(json['product_id']?.toString() ?? '0') ?? 0,
       productName: json['product_name']?.toString(),
-      productImage: json['product_image']?.toString(),
+      productImage: CartModel._parseLogo(json['product_image']?.toString()),
       supplierId: json['supplier_id'] is int ? json['supplier_id'] : int.tryParse(json['supplier_id']?.toString() ?? '0') ?? 0,
       quantity: json['quantity'] is int ? json['quantity'] : int.tryParse(json['quantity']?.toString() ?? '1') ?? 1,
       availableQuantity: json['available_quantity'] is int ? json['available_quantity'] : int.tryParse(json['available_quantity']?.toString() ?? ''),

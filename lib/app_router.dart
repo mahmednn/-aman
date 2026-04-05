@@ -7,7 +7,6 @@ import 'package:flutter_application_11/data_layer/repository/category_repo.dart'
 import 'package:flutter_application_11/data_layer/repository/supplier_repo.dart';
 import 'package:flutter_application_11/data_layer/web_services/category_services.dart';
 import 'package:flutter_application_11/data_layer/web_services/supplier_services.dart';
-import 'package:flutter_application_11/presentation_layer/screens/prouduct_supplier.dart';
 import 'package:flutter_application_11/presentation_layer/screens/home_screen.dart';
 import 'package:flutter_application_11/presentation_layer/screens/splash_screen.dart';
 import 'package:flutter_application_11/presentation_layer/screens/auth/login_screen.dart';
@@ -18,6 +17,7 @@ import 'package:flutter_application_11/presentation_layer/screens/auth/reset_pas
 import 'package:flutter_application_11/presentation_layer/screens/auth/profile_screen.dart';
 import 'package:flutter_application_11/presentation_layer/screens/auth/map_selection_screen.dart';
 import 'package:flutter_application_11/presentation_layer/screens/auth/saved_locations_screen.dart';
+import 'package:flutter_application_11/presentation_layer/screens/wallet_screen.dart';
 import 'package:flutter_application_11/data_layer/web_services/auth_services.dart';
 import 'package:flutter_application_11/data_layer/repository/auth_repo.dart';
 import 'package:flutter_application_11/business_logic_layer/cubit/auth/auth_cubit.dart';
@@ -27,6 +27,9 @@ import 'package:flutter_application_11/business_logic_layer/cubit/location/locat
 import 'package:flutter_application_11/data_layer/web_services/cart_services.dart';
 import 'package:flutter_application_11/data_layer/repository/cart_repository.dart';
 import 'package:flutter_application_11/business_logic_layer/cubit/cart/cart_cubit.dart';
+import 'package:flutter_application_11/data_layer/web_services/product_services.dart';
+import 'package:flutter_application_11/data_layer/repository/product_repository.dart';
+import 'package:flutter_application_11/business_logic_layer/cubit/products/products_cubit.dart';
 
 
 class AppRouter {
@@ -40,6 +43,8 @@ class AppRouter {
   late LocationCubit locationCubit;
   late CartRepository cartRepository;
   late CartCubit cartCubit;
+  late ProductRepository productRepository;
+  late ProductsCubit productsCubit;
 
   AppRouter() {
     // 1. Create a single, shared Dio instance with base configuration
@@ -71,11 +76,12 @@ class AppRouter {
     category = CategoryRepo(categoryServices: CategoryServices(dio: dio));
     categoriesCubit = CategoriesCubit(categoryRepo: category);
 
-    // Initialize Cart services
-    // Since CartServices has its own constructor and interceptor handling token, 
-    // we use a new instance that functions similarly to authServices.
-    cartRepository = CartRepository(CartServices());
+    // Initialize Cart services with the shared Dio instance for consistency
+    cartRepository = CartRepository(CartServices(dio: dio));
     cartCubit = CartCubit(cartRepository: cartRepository);
+
+    productRepository = ProductRepository(ProductServices(dio));
+    productsCubit = ProductsCubit(productRepository);
   }
 
   Route? generateRoute(RouteSettings settings) {
@@ -138,10 +144,10 @@ class AppRouter {
           settings: settings,
           builder: (_) => const SavedLocationsScreen(),
         );
-      case prouductSupplierScreen:
+      case walletScreen:
         return MaterialPageRoute(
           settings: settings,
-          builder: (_) => const ProuductSupplier(),
+          builder: (_) => const WalletScreen(),
         );
       default:
         return null;

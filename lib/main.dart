@@ -4,7 +4,11 @@ import 'package:flutter_application_11/constants/strings.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-void main() {
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
   runApp(MyApp(appRouter: AppRouter()));
 }
 
@@ -21,6 +25,7 @@ class MyApp extends StatelessWidget {
         BlocProvider.value(value: appRouter.supplierCubit),
         BlocProvider.value(value: appRouter.categoriesCubit),
         BlocProvider.value(value: appRouter.locationCubit),
+        BlocProvider.value(value: appRouter.productsCubit),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

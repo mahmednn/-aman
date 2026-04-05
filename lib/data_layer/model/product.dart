@@ -132,6 +132,22 @@ class ProductSupplierModel {
       'quantity': quantity,
       'is_active': isActive,
       'is_available': isAvailable,
-    };
+  };
   }
+}
+
+/// Helper class to group a product with a specific supplier's offering.
+/// Used in CategoryDetails and SupplierProfile screens for unified rendering.
+class ProductWithSupplier {
+  final ProductModel product;
+  final ProductSupplierModel supplierInfo;
+  final String? prefix;
+
+  ProductWithSupplier({
+    required this.product,
+    required this.supplierInfo,
+    this.prefix,
+  });
+
+  String get heroTag => '${prefix ?? 'product_hero'}_${product.id}_${supplierInfo.productSupplierId}';
 }

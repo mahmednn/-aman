@@ -2,24 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter_application_11/constants/strings.dart'; // افترض وجود ثوابت هنا
 
-/// قائمة Shimmer قابلة لإعادة الاستخدام كعنصر تحميل
-/// قائمة Shimmer قابلة لإعادة الاستخدام كعنصر تحميل
-class ListLoadingSkeleton extends StatelessWidget {
+/// عنصر تحميل مشبه لكرت السلة المطابق للشكل الحقيقي بالضبط
+class CartLoadingSkeleton extends StatelessWidget {
   final int itemCount;
-  final double itemHeight;
-  final EdgeInsetsGeometry padding;
 
-  const ListLoadingSkeleton({
+  const CartLoadingSkeleton({
     super.key,
-    this.itemCount = 6,
-    this.itemHeight = 120,
-    this.padding = const EdgeInsets.all(defaultPadding),
+    this.itemCount = 3,
   });
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      padding: padding,
+      padding: const EdgeInsets.all(16),
       itemCount: itemCount,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -27,53 +22,97 @@ class ListLoadingSkeleton extends StatelessWidget {
         baseColor: cardColor,
         highlightColor: Colors.grey[800]!,
         child: Container(
-          height: itemHeight,
-          margin: const EdgeInsets.only(bottom: defaultPadding),
+          margin: const EdgeInsets.only(bottom: 24),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Colors.transparent, // Background handles shimmer
             borderRadius: BorderRadius.circular(cardBorderRadius),
+            border: Border.all(color: Colors.white.withOpacity(0.08)),
           ),
-          child: Row(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                width: itemHeight,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(cardBorderRadius),
+              // Header Row
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    // Avatar
+                    Container(
+                      width: 56,
+                      height: 56,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(width: 14),
+                    // Titles
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: 17,
+                            width: 140,
+                            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(4)),
+                          ),
+                          const SizedBox(height: 6),
+                          Container(
+                            height: 14,
+                            width: 60,
+                            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(4)),
+                          ),
+                        ],
+                      ),
+                    ),
+                    // Delete Button
+                    Container(
+                      height: 48,
+                      width: 48,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              const Divider(color: Colors.white12, height: 1, indent: 16, endIndent: 16),
+              // Items Row
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                child: SizedBox(
+                  height: 65,
+                  child: Row(
                     children: [
                       Container(
-                        height: 16,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(4),
-                        ),
+                        width: 65,
+                        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(14)),
                       ),
+                      const SizedBox(width: 10),
                       Container(
-                        height: 14,
-                        width: 120,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(4),
-                        ),
+                        width: 65,
+                        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(14)),
                       ),
+                      const SizedBox(width: 10),
                       Container(
-                        height: 14,
-                        width: 80,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(4),
-                        ),
+                        width: 65,
+                        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(14)),
                       ),
                     ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 4),
+              // Bottom Cart Details Button
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Container(
+                  height: 56,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
                   ),
                 ),
               ),
@@ -85,7 +124,7 @@ class ListLoadingSkeleton extends StatelessWidget {
   }
 }
 
-/// عنصر شبكي Shimmer قابل لإعادة الاستخدام كمكون تحميل للشبكات
+/// Shimmer شبكي مع كروت تطابق كرت المنتج (ProductCard) المستخدم في قائمة المنتجات
 class GridLoadingSkeleton extends StatelessWidget {
   final int itemCount;
   final double aspectRatio;
@@ -93,7 +132,7 @@ class GridLoadingSkeleton extends StatelessWidget {
   const GridLoadingSkeleton({
     super.key,
     this.itemCount = 8,
-    this.aspectRatio = 0.6,
+    this.aspectRatio = 0.6, // Matches ProductCard's general aspect ratio (which we use 0.6)
   });
 
   @override
@@ -113,16 +152,18 @@ class GridLoadingSkeleton extends StatelessWidget {
         highlightColor: Colors.grey[800]!,
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Colors.transparent, // Required for Shimmer child
             borderRadius: BorderRadius.circular(cardBorderRadius),
+            border: Border.all(color: glassBorder),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              // Product Image container (Flex 1)
               Expanded(
-                flex: 3,
+                flex: 1,
                 child: Container(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.vertical(
                       top: Radius.circular(cardBorderRadius),
@@ -130,50 +171,49 @@ class GridLoadingSkeleton extends StatelessWidget {
                   ),
                 ),
               ),
+              // Text Content container (Flex 1)
               Expanded(
-                flex: 2,
+                flex: 1,
                 child: Padding(
-                  padding: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(8.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      // Texts Group
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              height: 14,
+                              width: double.infinity,
+                              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(4)),
+                            ),
+                            const SizedBox(height: 4),
+                            Container(
+                              height: 11,
+                              width: 80,
+                              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(4)),
+                            ),
+                            const Spacer(),
+                            Container(
+                              height: 15,
+                              width: 60,
+                              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(4)),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      // Add to Cart Button Block
                       Container(
-                        height: 14,
+                        height: 36,
                         width: double.infinity,
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(4),
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                      ),
-                      Container(
-                        height: 12,
-                        width: 80,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            height: 16,
-                            width: 50,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                          ),
-                          Container(
-                            height: 30,
-                            width: 30,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
                       ),
                     ],
                   ),
@@ -187,7 +227,87 @@ class GridLoadingSkeleton extends StatelessWidget {
   }
 }
 
-/// Shimmer مخصص لصفحة البداية
+/// Shimmer لقائمة الموردين يطابق Supplier Item الحقيقي 
+class SupplierListLoadingSkeleton extends StatelessWidget {
+  final int itemCount;
+
+  const SupplierListLoadingSkeleton({
+    super.key,
+    this.itemCount = 5,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      itemCount: itemCount,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemBuilder: (context, index) => Shimmer.fromColors(
+        baseColor: cardColor,
+        highlightColor: Colors.grey[700]!,
+        child: Container(
+          margin: const EdgeInsets.only(bottom: 16),
+          decoration: BoxDecoration(
+            color: Colors.transparent,
+            borderRadius: BorderRadius.circular(defaultBorderRadius),
+            border: Border.all(color: glassBorder),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Main Banner
+              Container(
+                height: 160,
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(defaultBorderRadius),
+                  ),
+                ),
+              ),
+              // Info Pad
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: 18,
+                            width: 160,
+                            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(4)),
+                          ),
+                          const SizedBox(height: 4),
+                          Container(
+                            height: 13,
+                            width: 90,
+                            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(4)),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      height: 16,
+                      width: 45,
+                      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(4)),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Shimmer مخصص لصفحة البداية يطابق عناصر الصفحة
 class HomeShimmerSkeleton extends StatelessWidget {
   const HomeShimmerSkeleton({super.key});
 
@@ -207,7 +327,7 @@ class HomeShimmerSkeleton extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    width: 120,
+                    width: 140,
                     height: 40,
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -215,18 +335,18 @@ class HomeShimmerSkeleton extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    width: 40,
+                    width: 60,
                     height: 40,
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       color: Colors.white,
-                      shape: BoxShape.circle,
+                      borderRadius: BorderRadius.circular(15),
                     ),
                   ),
                 ],
               ),
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
           // Slider Shimmer
           Shimmer.fromColors(
             baseColor: cardColor,
@@ -255,7 +375,7 @@ class HomeShimmerSkeleton extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 30),
+          const SizedBox(height: 24),
           // Categories Header Shimmer
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -263,8 +383,8 @@ class HomeShimmerSkeleton extends StatelessWidget {
               baseColor: cardColor,
               highlightColor: Colors.grey[800]!,
               child: Container(
-                width: 150,
-                height: 24,
+                width: 130,
+                height: 20,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(4),
@@ -272,36 +392,39 @@ class HomeShimmerSkeleton extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 15),
-          // Categories Horizontal Grid Shimmer
+          const SizedBox(height: 12),
+          // Categories Horizontal Grid Shimmer (matches categories grid perfectly)
           SizedBox(
-            height: 200,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              itemCount: 4,
-              itemBuilder: (context, index) => Shimmer.fromColors(
-                baseColor: cardColor,
-                highlightColor: Colors.grey[800]!,
-                child: Column(
+            height: 340, // Height matching categories list
+            child: Shimmer.fromColors(
+              baseColor: cardColor,
+              highlightColor: Colors.grey[800]!,
+              child: GridView.builder(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 3 / 2.5,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                ),
+                itemCount: 6,
+                itemBuilder: (context, index) => Column(
                   children: [
                     Expanded(
                       flex: 4,
-                      child: Center(
-                        child: Container(
-                          width: 80,
-                          height: 80,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(15),
-                          ),
+                      child: Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15),
                         ),
                       ),
                     ),
                     const SizedBox(height: 8),
                     Container(
-                      width: 80,
-                      height: 12,
+                      height: 13,
+                      width: 60,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(4),
@@ -312,7 +435,7 @@ class HomeShimmerSkeleton extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 30),
+          const SizedBox(height: 24),
           // Suppliers Header Shimmer
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -320,8 +443,8 @@ class HomeShimmerSkeleton extends StatelessWidget {
               baseColor: cardColor,
               highlightColor: Colors.grey[800]!,
               child: Container(
-                width: 150,
-                height: 24,
+                width: 140,
+                height: 20,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(4),
@@ -329,33 +452,16 @@ class HomeShimmerSkeleton extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 15),
-          // Suppliers List Shimmer
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            itemCount: 3,
-            itemBuilder: (context, index) => Shimmer.fromColors(
-              baseColor: cardColor,
-              highlightColor: Colors.grey[800]!,
-              child: Container(
-                height: 100,
-                margin: const EdgeInsets.only(bottom: 12),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15),
-                ),
-              ),
-            ),
-          ),
+          const SizedBox(height: 12),
+          // Suppliers List Shimmer (reusing perfectly matched one)
+          const SupplierListLoadingSkeleton(itemCount: 3),
         ],
       ),
     );
   }
 }
 
-/// Shimmer مخصص لشاشة تفاصيل الفئة
+/// Shimmer مخصص لشاشة تفاصيل الفئة يطابق المنتجات والموردين
 class CategoryDetailsShimmerSkeleton extends StatelessWidget {
   const CategoryDetailsShimmerSkeleton({super.key});
 
@@ -373,7 +479,7 @@ class CategoryDetailsShimmerSkeleton extends StatelessWidget {
               highlightColor: Colors.grey[800]!,
               child: Container(
                 width: 100,
-                height: 24,
+                height: 20,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(4),
@@ -403,13 +509,13 @@ class CategoryDetailsShimmerSkeleton extends StatelessWidget {
                         width: 80,
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(15),
+                          shape: BoxShape.circle, // Suppliers are circle avatar mostly
                         ),
                       ),
                       const SizedBox(height: 8),
                       Container(
                         height: 12,
-                        width: 60,
+                        width: 70,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(4),
@@ -431,8 +537,8 @@ class CategoryDetailsShimmerSkeleton extends StatelessWidget {
               baseColor: cardColor,
               highlightColor: Colors.grey[800]!,
               child: Container(
-                width: 150,
-                height: 24,
+                width: 120,
+                height: 20,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(4),
@@ -441,30 +547,10 @@ class CategoryDetailsShimmerSkeleton extends StatelessWidget {
             ),
           ),
 
-          /// قائمة المنتجات (Grid)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: 4,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 0.6,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-              ),
-              itemBuilder: (context, index) => Shimmer.fromColors(
-                baseColor: cardColor,
-                highlightColor: Colors.grey[800]!,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                ),
-              ),
-            ),
+          /// قائمة المنتجات (Grid - reusing nicely formatted GridLoadingSkeleton)
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: GridLoadingSkeleton(itemCount: 4),
           ),
 
           const SizedBox(height: 30),
@@ -495,6 +581,7 @@ class EmptyStateWidget extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             message,
+            textAlign: TextAlign.center,
             style: const TextStyle(
               color: textSecondary,
               fontSize: 16,

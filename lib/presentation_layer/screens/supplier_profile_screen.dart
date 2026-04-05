@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_application_11/business_logic_layer/cubit/cart/cart_cubit.dart';
 import 'package:flutter_application_11/business_logic_layer/cubit/cart/cart_state.dart';
+import 'package:flutter_application_11/business_logic_layer/cubit/products/products_cubit.dart';
+import 'package:flutter_application_11/business_logic_layer/cubit/products/products_state.dart';
 import 'package:flutter_application_11/data_layer/model/supplier.dart';
+import 'package:flutter_application_11/data_layer/model/product.dart' as np;
 import 'package:flutter_application_11/presentation_layer/widgets/custom_network_image.dart';
 import 'package:flutter_application_11/presentation_layer/widgets/product_card.dart';
 import 'package:flutter_application_11/presentation_layer/widgets/custom_back_button.dart';
@@ -23,6 +26,15 @@ class SupplierProfileScreen extends StatefulWidget {
 }
 
 class _SupplierProfileScreenState extends State<SupplierProfileScreen> {
+  @override
+  void initState() {
+    super.initState();
+    final productsState = context.read<ProductsCubit>().state;
+    if (productsState is! ProductsLoaded) {
+      context.read<ProductsCubit>().getAllProducts();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -128,46 +140,82 @@ class _SupplierProfileScreenState extends State<SupplierProfileScreen> {
                     ),
                   ),
                 ),
-                // عرض المنتجات كقائمة
-                if (widget.supplier.products?.isEmpty ?? true)
-                  const SliverToBoxAdapter(
-                    child: Center(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: 40),
-                        child: Text(
-                          "لا توجد منتجات متوفرة حالياً",
-                          style: TextStyle(color: Colors.white70, fontSize: 16),
-                        ),
-                      ),
-                    ),
-                  )
-                else
-                  SliverPadding(
-                    padding: const EdgeInsets.all(16),
-                    sliver: SliverGrid(
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        childAspectRatio: 0.6,
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10,
-                      ),
-                      delegate: SliverChildBuilderDelegate((context, index) {
-                        final product = widget.supplier.products![index];
-                        final productHeroTag =
-                            'supplier_product_hero_${product.id}';
-
-                        return ProductCard(
-                          key: ValueKey(product.id),
-                          product: product,
-                          supplier: widget.supplier,
-                          heroTag: productHeroTag,
-                          onAddToCart: () {
-                             context.read<CartCubit>().addToCart(product.id, 1, product.pivotId ?? 0);
+                
+                // عرض المنتجات كقائمة باستخدام ProductsCubit
+                SliverToBoxAdapter(
+                  child: BlocBuilder<ProductsCubit, ProductsState>(
+                    builder: (context, productsState) {
+                      if (productsState is ProductsLoading) {
+                        return const Center(child: Padding(
+                          padding: EdgeInsets.all(40.0),
+                          child: CircularProgressIndicator(),
+                        ));
+                      } else if (productsState is ProductsLoaded) {
+                        final supplierProducts = <np.ProductWithSupplier>[];
+                        for (final product in productsState.products) {
+                          for (final supplierInfo in product.suppliers) {
+                            if (supplierInfo.supplierId == widget.supplier.id) {
+                              supplierProducts.add(np.ProductWithSupplier(
+                                product: product,
+                                supplierInfo: supplierInfo,
+                                prefix: 'supplier_product',
+                              ));
+                            }
+                          }
+                        }
+                        
+                        if (supplierProducts.isEmpty) {
+                          return const Center(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(vertical: 40),
+                              child: Text(
+                                "لا توجد منتجات متوفرة حالياً",
+                                style: TextStyle(color: Colors.white70, fontSize: 16),
+                              ),
+                            ),
+                          );
+                        }
+                        
+                        return GridView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          padding: const EdgeInsets.all(16),
+                          itemCount: supplierProducts.length,
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 0.6,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+                          ),
+                          itemBuilder: (context, index) {
+                            final item = supplierProducts[index];
+                            final productHeroTag = item.heroTag;
+                            
+                            return ProductCard(
+                              key: ValueKey('${item.product.id}_${item.supplierInfo.productSupplierId}'),
+                              product: item.product,
+                              supplierInfo: item.supplierInfo,
+                              heroTag: productHeroTag,
+                              onAddToCart: () {
+                                context.read<CartCubit>().addToCart(
+                                  item.product.id, 
+                                  1, 
+                                  item.supplierInfo.productSupplierId
+                                );
+                              },
+                            );
                           },
                         );
-                      }, childCount: widget.supplier.products?.length ?? 0),
-                    ),
+                      } else if (productsState is ProductsError) {
+                        return Center(child: Padding(
+                          padding: const EdgeInsets.all(40.0),
+                          child: Text(productsState.message, style: const TextStyle(color: dangerColor)),
+                        ));
+                      }
+                      return const SizedBox();
+                    },
                   ),
+                ),
                 const SliverPadding(padding: EdgeInsets.only(bottom: 100)),
               ],
               ),
@@ -184,4 +232,3 @@ class _SupplierProfileScreenState extends State<SupplierProfileScreen> {
     );
   }
 }
-

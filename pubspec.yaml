@@ -51,6 +51,7 @@ dependencies:
   firebase_messaging: ^14.7.10
   flutter_local_notifications: ^17.1.0
   change_app_package_name: ^1.5.0
+  flutter_dotenv: ^6.0.0
 
 dev_dependencies:
   flutter_lints: ^5.0.0
@@ -68,6 +69,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - .env
     - assets/images/logo.png
     - assets/images/logo2.png
     - assets/images/back1.png

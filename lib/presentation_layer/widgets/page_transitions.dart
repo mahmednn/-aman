@@ -12,12 +12,12 @@ class PageTransitions {
     );
   }
 
-  // 2. انتقال الإزاحة من اليمين (مناسب لبروفايل المورد)
+  // 2. انتقال الإزاحة من اليسار (مناسب لبروفايل المورد)
   static Route slideRoute(Widget page) {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => page,
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        const begin = Offset(1.0, 0.0); // يبدأ من اليمين
+        const begin = Offset(-1.0, 0.0); // يبدأ من اليسار
         const end = Offset.zero;
         const curve = Curves.easeOutQuart; // منحنى احترافي سلس
 

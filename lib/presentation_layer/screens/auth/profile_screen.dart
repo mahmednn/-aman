@@ -255,41 +255,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
             "المحفظة",
             Icons.account_balance_wallet_rounded,
             Colors.blueAccent,
+            onTap: () => Navigator.pushNamed(context, walletScreen),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildQuickCard(String label, IconData icon, Color color) {
-    return Container(
-      width: (MediaQuery.of(context).size.width - 60) / 3,
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      decoration: BoxDecoration(
-        color: glassBackground,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: glassBorder),
-      ),
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.15),
-              shape: BoxShape.circle,
+  Widget _buildQuickCard(String label, IconData icon, Color color, {VoidCallback? onTap}) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(20),
+      child: Container(
+        width: (MediaQuery.of(context).size.width - 60) / 3,
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        decoration: BoxDecoration(
+          color: glassBackground,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: glassBorder),
+        ),
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: 0.15),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: color, size: 22),
             ),
-            child: Icon(icon, color: color, size: 22),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            label,
-            style: const TextStyle(
-              color: textPrimary,
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
+            const SizedBox(height: 12),
+            Text(
+              label,
+              style: const TextStyle(
+                color: textPrimary,
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -166,10 +166,12 @@ class _MapSelectionScreenState extends State<MapSelectionScreen> {
   }
 
   Future<bool> _handleLocationPermission() async {
+    debugPrint("LOCATION_DEBUG: _handleLocationPermission called");
     bool serviceEnabled;
     LocationPermission permission;
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    debugPrint("LOCATION_DEBUG: isLocationServiceEnabled: $serviceEnabled");
     if (!serviceEnabled) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -183,8 +185,11 @@ class _MapSelectionScreenState extends State<MapSelectionScreen> {
     }
 
     permission = await Geolocator.checkPermission();
+    debugPrint("LOCATION_DEBUG: initial permission check: $permission");
     if (permission == LocationPermission.denied) {
+      debugPrint("LOCATION_DEBUG: Requesting permission...");
       permission = await Geolocator.requestPermission();
+      debugPrint("LOCATION_DEBUG: permission request result: $permission");
       if (permission == LocationPermission.denied) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -298,40 +303,72 @@ class _MapSelectionScreenState extends State<MapSelectionScreen> {
   }
 
   Future<void> _handleInitialLocation() async {
+    debugPrint("LOCATION_DEBUG: _handleInitialLocation started");
     final hasPermission = await _handleLocationPermission();
+    debugPrint("LOCATION_DEBUG: hasPermission: $hasPermission");
     if (!hasPermission) {
       return;
     }
 
     try {
-      Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
-      );
+      debugPrint("LOCATION_DEBUG: Fetching current position (with 10s timeout)...");
+      Position? position;
+      try {
+        position = await Geolocator.getCurrentPosition(
+          locationSettings: AndroidSettings(
+            accuracy: LocationAccuracy.high,
+            timeLimit: const Duration(seconds: 10),
+            forceLocationManager: true,
+          ),
+        );
+      } catch (e) {
+        debugPrint("LOCATION_DEBUG: getCurrentPosition error or timeout: $e");
+      }
 
-      LatLng myLoc = LatLng(position.latitude, position.longitude);
+      if (position == null) {
+        debugPrint("LOCATION_DEBUG: Trying getLastKnownPosition as fallback...");
+        position = await Geolocator.getLastKnownPosition();
+      }
 
-      if (_isPointInPolygon(myLoc, allowedArea)) {
-        controller?.animateCamera(CameraUpdate.newLatLngZoom(myLoc, 15));
-        if (!_allowMultiple) {
-          setState(() {
-            _selectedPoint = myLoc;
-          });
-          _updateMarkers();
+      if (position != null) {
+        debugPrint(
+          "LOCATION_DEBUG: Position determined: ${position.latitude}, ${position.longitude}",
+        );
+
+        LatLng myLoc = LatLng(position.latitude, position.longitude);
+
+        bool isInPolygon = _isPointInPolygon(myLoc, allowedArea);
+        debugPrint("LOCATION_DEBUG: isWithinAllowedArea: $isInPolygon");
+
+        if (isInPolygon) {
+          controller?.animateCamera(CameraUpdate.newLatLngZoom(myLoc, 15));
+          if (!_allowMultiple) {
+            setState(() {
+              _selectedPoint = myLoc;
+            });
+            _updateMarkers();
+          }
+        } else {
+          controller?.animateCamera(
+            CameraUpdate.newLatLngZoom(const LatLng(32.8872, 13.1913), 12),
+          );
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text("موقعك الحالي خارج النطاق المسموح به"),
+                backgroundColor: dangerColor,
+              ),
+            );
+          }
         }
       } else {
+        debugPrint("LOCATION_DEBUG: Could not determine location at all.");
         controller?.animateCamera(
           CameraUpdate.newLatLngZoom(const LatLng(32.8872, 13.1913), 12),
         );
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("موقعك الحالي خارج النطاق المسموح به"),
-              backgroundColor: dangerColor,
-            ),
-          );
-        }
       }
     } catch (e) {
+      debugPrint("LOCATION_DEBUG: Error in _handleInitialLocation: $e");
       controller?.animateCamera(
         CameraUpdate.newLatLngZoom(const LatLng(32.8872, 13.1913), 12),
       );
@@ -508,73 +545,119 @@ class _MapSelectionScreenState extends State<MapSelectionScreen> {
                         const SizedBox(height: 12),
                         InkWell(
                           onTap: () async {
-                            try {
-                              Position position =
-                                  await Geolocator.getCurrentPosition(
-                                    desiredAccuracy: LocationAccuracy.high,
-                                  );
-                              LatLng userPoint = LatLng(
-                                position.latitude,
-                                position.longitude,
-                              );
+                            debugPrint("LOCATION_DEBUG: LocateMe button pressed");
+                            final hasPermission = await _handleLocationPermission();
+                            debugPrint("LOCATION_DEBUG: hasPermission: $hasPermission");
+                            if (!hasPermission) return;
 
-                              if (!_isPointInPolygon(userPoint, allowedArea)) {
-                                if (context.mounted) {
+                            try {
+                              debugPrint(
+                                "LOCATION_DEBUG: Fetching current position (with 10s timeout)...",
+                              );
+                              Position? position;
+                              try {
+                                position = await Geolocator.getCurrentPosition(
+                                  locationSettings: AndroidSettings(
+                                    accuracy: LocationAccuracy.high,
+                                    timeLimit: const Duration(seconds: 10),
+                                    forceLocationManager: true,
+                                  ),
+                                );
+                              } catch (e) {
+                                debugPrint(
+                                  "LOCATION_DEBUG: getCurrentPosition error or timeout: $e",
+                                );
+                              }
+
+                              if (position == null) {
+                                debugPrint(
+                                  "LOCATION_DEBUG: Trying getLastKnownPosition as fallback...",
+                                );
+                                position = await Geolocator.getLastKnownPosition();
+                              }
+
+                              if (position != null) {
+                                debugPrint(
+                                  "LOCATION_DEBUG: Position determined: ${position.latitude}, ${position.longitude}",
+                                );
+                                LatLng userPoint = LatLng(
+                                  position.latitude,
+                                  position.longitude,
+                                );
+
+                                bool isInPolygon = _isPointInPolygon(
+                                  userPoint,
+                                  allowedArea,
+                                );
+                                debugPrint(
+                                  "LOCATION_DEBUG: isWithinAllowedArea: $isInPolygon",
+                                );
+
+                                if (!isInPolygon) {
+                                  if (context.mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                          "موقعك الحالي خارج النطاق المسموح به",
+                                        ),
+                                        backgroundColor: dangerColor,
+                                      ),
+                                    );
+                                  }
+                                  controller?.animateCamera(
+                                    CameraUpdate.newLatLngZoom(userPoint, 15),
+                                  );
+                                  return;
+                                }
+
+                                if (_allowMultiple) {
+                                  String generatedDesc =
+                                      await _getAddressFromLatLng(userPoint);
+                                  Map<String, String>? details =
+                                      await _showNameAndDescDialog(
+                                        initialDesc: generatedDesc,
+                                      );
+                                  if (details != null) {
+                                    setState(() {
+                                      _selectedPoints.add(
+                                        SelectedLocation(
+                                          name: details['name'],
+                                          address: details['description'],
+                                          latitude: userPoint.latitude,
+                                          longitude: userPoint.longitude,
+                                        ),
+                                      );
+                                    });
+                                    _updateMarkers();
+                                  }
+                                } else {
+                                  setState(() {
+                                    _selectedPoint = userPoint;
+                                  });
+                                  _updateMarkers();
+                                }
+                                controller?.animateCamera(
+                                  CameraUpdate.newLatLngZoom(userPoint, 15),
+                                );
+                              } else {
+                                debugPrint(
+                                  "LOCATION_DEBUG: Could not determine location at all.",
+                                );
+                                if (mounted) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                       content: Text(
-                                        "موقعك الحالي خارج النطاق المسموح به",
+                                        "تعذر تحديد موقعك الحالي. تأكد من تفعيل GPS و الصلاحيات",
                                       ),
                                       backgroundColor: dangerColor,
                                     ),
                                   );
                                 }
-                                controller?.animateCamera(
-                                  CameraUpdate.newLatLngZoom(userPoint, 15),
-                                );
-                                return;
                               }
-
-                              if (_allowMultiple) {
-                                String generatedDesc =
-                                    await _getAddressFromLatLng(userPoint);
-                                Map<String, String>? details =
-                                    await _showNameAndDescDialog(
-                                      initialDesc: generatedDesc,
-                                    );
-                                if (details != null) {
-                                  setState(() {
-                                    _selectedPoints.add(
-                                      SelectedLocation(
-                                        name: details['name'],
-                                        address: details['description'],
-                                        latitude: userPoint.latitude,
-                                        longitude: userPoint.longitude,
-                                      ),
-                                    );
-                                  });
-                                  _updateMarkers();
-                                }
-                              } else {
-                                setState(() {
-                                  _selectedPoint = userPoint;
-                                });
-                                _updateMarkers();
-                              }
-                              controller?.animateCamera(
-                                CameraUpdate.newLatLngZoom(userPoint, 15),
-                              );
                             } catch (e) {
-                              if (mounted) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                      "تعذر الحصول على موقعك الحالي. تأكد من تفعيل GPS و الصلاحيات",
-                                    ),
-                                    backgroundColor: dangerColor,
-                                  ),
-                                );
-                              }
+                              debugPrint(
+                                "LOCATION_DEBUG: Unexpected error in LocateMe onTap: $e",
+                              );
                             }
                           },
                           child: Container(

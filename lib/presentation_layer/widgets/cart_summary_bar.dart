@@ -13,18 +13,18 @@ class CartSummaryBar extends StatelessWidget {
     return BlocBuilder<CartCubit, CartState>(
       builder: (context, state) {
         final cartCubit = context.read<CartCubit>();
-        final itemCount = cartCubit.totalItemsCount;
+        final cartCount = cartCubit.pendingCartsCount;
         final totalAmount = cartCubit.totalAmount;
-        final hasItems = itemCount > 0;
+        final hasItems = cartCount > 0;
 
         if (!hasItems) {
           return const SizedBox.shrink();
         }
 
         return AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
-          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+          duration: Duration(milliseconds: 300),
+          margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
           decoration: BoxDecoration(
             color: primaryAccent,
             borderRadius: BorderRadius.circular(15),
@@ -35,20 +35,16 @@ class CartSummaryBar extends StatelessWidget {
                 offset: const Offset(0, 5),
               ),
             ],
-            border: Border.all(
-              color: primaryAccent.withValues(alpha: 0.5),
-            ),
+            border: Border.all(color: primaryAccent.withValues(alpha: 0.5)),
           ),
           child: InkWell(
             onTap: () {
-              // Navigate to the Cart tab in HomeScreen if it's open, 
+              // Navigate to the Cart tab in HomeScreen if it's open,
               // or push the CartScreen as a new page.
               // We'll use a direct push for now as it's the most reliable across all screens.
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => const CartScreen(),
-                ),
+                MaterialPageRoute(builder: (context) => const CartScreen()),
               );
             },
             child: Row(
@@ -65,15 +61,17 @@ class CartSummaryBar extends StatelessWidget {
                     size: 20,
                   ),
                 ),
-                const SizedBox(width: 15),
+                SizedBox(width: 15),
                 Expanded(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "لديك $itemCount منتجات في السلة",
-                        style: const TextStyle(
+                        cartCount == 1
+                            ? "لديك سلة واحدة"
+                            : "لديك $cartCount سلات في الانتظار",
+                        style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
@@ -89,7 +87,7 @@ class CartSummaryBar extends StatelessWidget {
                     ],
                   ),
                 ),
-                const Icon(
+                Icon(
                   Icons.arrow_forward_ios_rounded,
                   color: Colors.white,
                   size: 16,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-final baseUrl1 = 'http://102.203.200.14/api/';
+final baseUrl1 = dotenv.env['API_BASE_URL'] ?? 'http://102.203.200.14/api/';
 
 // --- Modern Deep Blue / Glassmorphism Palette ---
 
@@ -43,6 +44,7 @@ const String addToCartEndpoint = 'customer/carts/items';
 const String updateCartItemEndpoint = 'customer/carts/items/'; // append {cart_item_id}
 const String removeCartItemEndpoint = 'customer/carts/items/'; // append {cart_item_id}
 const String clearCartEndpoint = 'customer/carts/'; // append {cart_id}/clear
+const String checkoutPreviewEndpoint = 'customer/checkout/preview';
 
 // Routes
 const String splashRoute = '/';
@@ -55,4 +57,5 @@ const String supplierScreen = '/home';
 const String profileScreen = '/profile';
 const String mapSelectionScreen = '/map_selection';
 const String savedLocationsScreen = '/saved_locations';
+const String walletScreen = '/wallet';
 const String prouductSupplierScreen = '/product_supplier';

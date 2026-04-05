@@ -29,4 +29,7 @@ class ApiRoutes {
       'customer/locations/$id/set-default';
 
   static String publicSupplierById(int id) => 'public/suppliers/$id';
+
+  // Vehicles
+  static const vehicleTypes = 'vehicle-types';
 }

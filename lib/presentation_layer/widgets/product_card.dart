@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_11/constants/strings.dart';
-import 'package:flutter_application_11/data_layer/model/supplier.dart';
+import 'package:flutter_application_11/data_layer/model/product.dart';
 import 'package:flutter_application_11/presentation_layer/screens/product_details_screen.dart';
 import 'package:flutter_application_11/presentation_layer/widgets/custom_network_image.dart';
 
 class ProductCard extends StatelessWidget {
   final ProductModel product;
-  final SupplierModel? supplier;
+  final ProductSupplierModel supplierInfo;
   final String heroTag;
   final VoidCallback onAddToCart;
 
   const ProductCard({
     super.key,
     required this.product,
-    this.supplier,
+    required this.supplierInfo,
     required this.heroTag,
     required this.onAddToCart,
   });
@@ -27,7 +27,7 @@ class ProductCard extends StatelessWidget {
           MaterialPageRoute(
             builder: (context) => ProductDetailsScreen(
               product: product,
-              supplier: supplier,
+              supplierInfo: supplierInfo,
               heroTag: heroTag,
             ),
           ),
@@ -58,7 +58,7 @@ class ProductCard extends StatelessWidget {
                 child: Hero(
                   tag: heroTag,
                   child: CustomNetworkImage(
-                    imageUrl: product.img ?? '',
+                    imageUrl: product.img,
                     fit: BoxFit.cover,
                     width: double.infinity,
                   ),
@@ -88,20 +88,18 @@ class ProductCard extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 2),
-                          if (supplier != null) ...[
-                            Text(
-                              supplier!.user?.name ?? 'مورد غير معروف',
-                              style: const TextStyle(
-                                color: textSecondary,
-                                fontSize: 11,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
+                          Text(
+                            supplierInfo.supplierName,
+                            style: const TextStyle(
+                              color: textSecondary,
+                              fontSize: 11,
                             ),
-                          ],
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                           const Spacer(),
                           Text(
-                            "${product.price ?? '0'} د.ل",
+                            "${supplierInfo.price} د.ل",
                             style: const TextStyle(
                               color: primaryAccent,
                               fontWeight: FontWeight.bold,

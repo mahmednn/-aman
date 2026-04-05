@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import '../model/cart.dart';
+import '../model/vehicle.dart';
+import '../model/checkout_preview.dart';
 import '../web_services/cart_services.dart';
 
 class CartRepository {
@@ -25,6 +27,25 @@ class CartRepository {
       if (e is DioException && e.response?.statusCode == 404) {
         return [];
       }
+      throw _handleError(e);
+    }
+  }
+  
+  Future<List<VehicleModel>> getVehicleTypes() async {
+    try {
+      final response = await cartServices.getVehicleTypes();
+      if (response.statusCode == 200 && response.data != null) {
+        final responseData = response.data;
+        final data = responseData is Map<String, dynamic> ? responseData['data'] : null;
+        if (data is List) {
+          return data
+              .whereType<Map<String, dynamic>>()
+              .map(VehicleModel.fromJson)
+              .toList();
+        }
+      }
+      return [];
+    } catch (e) {
       throw _handleError(e);
     }
   }
@@ -82,6 +103,34 @@ class CartRepository {
     try {
       final response = await cartServices.clearCart(cartId);
       return {'success': true, 'message': _extractMessage(response.data, 'تم تفريغ السلة')};
+    } catch (e) {
+      throw _handleError(e);
+    }
+  }
+
+  Future<CheckoutPreviewModel> previewCheckout({
+    required int locationId,
+    required List<int> cartIds,
+    required int vehicleTypeId,
+    required String paymentMethod,
+    num walletAmount = 0,
+  }) async {
+    try {
+      final response = await cartServices.previewCheckout(
+        locationId: locationId,
+        cartIds: cartIds,
+        vehicleTypeId: vehicleTypeId,
+        paymentMethod: paymentMethod,
+        walletAmount: walletAmount,
+      );
+      
+      if (response.statusCode == 200 && response.data != null) {
+        final responseData = response.data;
+        if (responseData is Map<String, dynamic> && responseData['data'] is Map<String, dynamic>) {
+          return CheckoutPreviewModel.fromJson(responseData['data'] as Map<String, dynamic>);
+        }
+      }
+      throw 'تنسيق بيانات المعاينة غير صحيح';
     } catch (e) {
       throw _handleError(e);
     }

@@ -6,14 +6,11 @@ import 'package:flutter_application_11/business_logic_layer/cubit/suppliers_cubi
 import 'package:flutter_application_11/business_logic_layer/cubit/cart/cart_cubit.dart';
 import 'package:flutter_application_11/data_layer/model/category.dart';
 import 'package:flutter_application_11/data_layer/model/supplier.dart';
-import 'package:flutter_application_11/presentation_layer/screens/category_details_screen.dart';
-import 'package:flutter_application_11/presentation_layer/screens/supplier_profile_screen.dart';
 import 'package:flutter_application_11/presentation_layer/screens/cart_screen.dart';
-import 'package:flutter_application_11/presentation_layer/widgets/custom_network_image.dart';
-import 'package:flutter_application_11/presentation_layer/widgets/page_transitions.dart';
 import 'package:flutter_application_11/presentation_layer/widgets/cart_summary_bar.dart';
-
 import 'package:flutter_application_11/presentation_layer/screens/supplier_screen.dart';
+import 'package:flutter_application_11/presentation_layer/widgets/category_card.dart';
+import 'package:flutter_application_11/presentation_layer/widgets/supplier_card.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_application_11/constants/strings.dart';
 import 'package:flutter_application_11/business_logic_layer/cubit/auth/auth_cubit.dart';
@@ -33,7 +30,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _currentIndex = 0;
   int _navIndex = 0;
   bool _isAddressPromptOpen = false;
 
@@ -69,7 +65,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,7 +95,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 switchOutCurve: Curves.easeInQuart,
                 child: _buildBody(),
               ),
-              if (_navIndex != 2) // Don't show floating bar on the cart screen itself
+              if (_navIndex !=
+                  2) // Don't show floating bar on the cart screen itself
                 const Positioned(
                   bottom: 110, // Above the bottom nav bar
                   left: 0,
@@ -163,52 +159,50 @@ class _HomeScreenState extends State<HomeScreen> {
               backgroundColor: cardColor,
               child: SingleChildScrollView(
                 child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildTopHeader(),
-                  const SizedBox(height: 12),
-                  _buildModernSlider(),
-                  const SizedBox(height: 10),
-                  _buildIndicator(),
-                  const SizedBox(height: 24),
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildTopHeader(),
+                    const SizedBox(height: 12),
+                    _ModernSliderWithIndicator(sliderImages: _sliderImages),
+                    const SizedBox(height: 24),
 
-                  // 2. هنا نضع عنوان الفئات ثم الـ BlocBuilder الخاص بها
-                  _sectionTitle('الفئات المميزة'),
-                  const SizedBox(height: 12),
-                  BlocBuilder<CategoriesCubit, CategoriesState>(
-                    builder: (context, categoryState) {
-                      if (categoryState is CategoriesLoading) {
-                        return SizedBox(
-                          height: 200,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            padding: EdgeInsets.symmetric(horizontal: 16),
-                            itemCount: 4,
-                            itemBuilder: (context, index) => Shimmer.fromColors(
+                    // 2. هنا نضع عنوان الفئات ثم الـ BlocBuilder الخاص بها
+                    _sectionTitle('الفئات المميزة'),
+                    SizedBox(height: 12),
+                    BlocBuilder<CategoriesCubit, CategoriesState>(
+                      builder: (context, categoryState) {
+                        if (categoryState is CategoriesLoading) {
+                          return SizedBox(
+                            height: 340,
+                            child: Shimmer.fromColors(
                               baseColor: cardColor,
-                              highlightColor: Colors.grey[700]!,
-                              child: Container(
-                                width: 140,
-                                margin: const EdgeInsets.only(left: 10),
-                                child: Column(
+                              highlightColor: Colors.grey[800]!,
+                              child: GridView.builder(
+                                scrollDirection: Axis.horizontal,
+                                padding: const EdgeInsets.symmetric(horizontal: 16),
+                                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  childAspectRatio: 3 / 2.5,
+                                  crossAxisSpacing: 10,
+                                  mainAxisSpacing: 10,
+                                ),
+                                itemCount: 6,
+                                itemBuilder: (context, index) => Column(
                                   children: [
                                     Expanded(
                                       flex: 4,
-                                      child: Center(
-                                        child: Container(
-                                          width: 80,
-                                          height: 80,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.circular(15),
-                                          ),
+                                      child: Container(
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(15),
                                         ),
                                       ),
                                     ),
                                     const SizedBox(height: 8),
                                     Container(
-                                      width: 80,
-                                      height: 12,
+                                      height: 13,
+                                      width: 60,
                                       decoration: BoxDecoration(
                                         color: Colors.white,
                                         borderRadius: BorderRadius.circular(4),
@@ -218,35 +212,34 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                             ),
-                          ),
-                        );
-                      } else if (categoryState is CategoriesLoaded) {
-                        return _buildCategoriesGrid(
-                          categoryState.categories,
-                          suppliers,
-                        );
-                      } else if (categoryState is CategoriesError) {
-                        return EmptyStateWidget(
-                          message: 'خطأ: ${categoryState.error}',
-                          icon: Icons.error_outline,
-                        );
-                      }
-                      return const SizedBox.shrink();
-                    },
-                  ),
+                          );
+                        } else if (categoryState is CategoriesLoaded) {
+                          return _buildCategoriesGrid(
+                            categoryState.categories,
+                            suppliers,
+                          );
+                        } else if (categoryState is CategoriesError) {
+                          return EmptyStateWidget(
+                            message: 'خطأ: ${categoryState.error}',
+                            icon: Icons.error_outline,
+                          );
+                        }
+                        return const SizedBox.shrink();
+                      },
+                    ),
 
-                  const SizedBox(height: 24),
+                    const SizedBox(height: 24),
 
-                  // 3. عرض الموردين (الذين تم تحميلهم في الـ Builder الخارجي)
-                  _sectionTitle('أهم الموردين'),
-                  const SizedBox(height: 12),
-                  _buildSupplierList(suppliers),
+                    // 3. عرض الموردين (الذين تم تحميلهم في الـ Builder الخارجي)
+                    _sectionTitle('أهم الموردين'),
+                    const SizedBox(height: 12),
+                    _buildSupplierList(suppliers),
 
-                  const SizedBox(height: 100),
-                ],
+                    const SizedBox(height: 100),
+                  ],
+                ),
               ),
-            ),
-          );
+            );
           } else if (supplierState is SuppliersError) {
             return EmptyStateWidget(
               message: 'خطأ: ${supplierState.error}',
@@ -308,7 +301,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        
                         Text(
                           "التوصيل إلى",
                           style: TextStyle(
@@ -335,7 +327,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
                 const SizedBox(width: 10),
-                
               ],
             ),
           ),
@@ -346,23 +337,28 @@ class _HomeScreenState extends State<HomeScreen> {
               borderRadius: BorderRadius.circular(15),
               border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
             ),
-            child: Row(
-              children: [
-                Text(
-                  "0 د.ل",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
+            child: InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, walletScreen);
+              },
+              child: Row(
+                children: [
+                  Text(
+                    "0 د.ل",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
                   ),
-                ),
-                SizedBox(width: 8),
-                Icon(
-                  Icons.account_balance_wallet_rounded,
-                  color: Colors.blueAccent,
-                  size: 20,
-                ),
-              ],
+                  SizedBox(width: 8),
+                  Icon(
+                    Icons.account_balance_wallet_rounded,
+                    color: Colors.blueAccent,
+                    size: 20,
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -370,60 +366,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildModernSlider() {
-    return CarouselSlider(
-      options: CarouselOptions(
-        height: 180,
-        autoPlay: true,
-        enlargeCenterPage: true,
-        viewportFraction: 0.79,
-        autoPlayInterval: const Duration(seconds: 4),
-        onPageChanged: (index, reason) {
-          setState(() => _currentIndex = index);
-        },
-      ),
-      items: _sliderImages.map((imagePath) {
-        return Container(
-          margin: const EdgeInsets.symmetric(horizontal: 6),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: Colors.grey.withValues(
-              alpha: 0.05,
-            ), // لون خلفية مؤقت في حال عدم وجود الصورة
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(20),
-            // استخدام صورة افتراضية أو من الشبكة إذا توفرت
-            child: Image.asset(
-              imagePath,
-              fit: BoxFit.cover,
-              width: double.infinity,
-            ),
-          ),
-        );
-      }).toList(),
-    );
-  }
-
-  Widget _buildIndicator() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: _sliderImages.asMap().entries.map((entry) {
-        return AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
-          width: _currentIndex == entry.key ? 18 : 8,
-          height: 8,
-          margin: const EdgeInsets.symmetric(horizontal: 4),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: _currentIndex == entry.key
-                ? secondaryAccent
-                : primaryAccent.withValues(alpha: 0.5),
-          ),
-        );
-      }).toList(),
-    );
-  }
+// The slider is extracted at the bottom of the file
 
   Widget _sectionTitle(String title) {
     return Directionality(
@@ -461,96 +404,16 @@ class _HomeScreenState extends State<HomeScreen> {
         child: GridView.builder(
           scrollDirection: Axis.horizontal,
           shrinkWrap: true,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            childAspectRatio: 2 / 2.5,
+            childAspectRatio: 3 / 2.5,
             crossAxisSpacing: 10,
             mainAxisSpacing: 10,
           ),
           itemCount: categories.length,
           itemBuilder: (context, index) {
             final category = categories[index];
-            return InkWell(
-              onTap: () {
-                // Navigate to category details screen
-
-                Navigator.push(
-                  context,
-                  PageTransitions.slideFromLeft(
-                    CategoryDetailsScreen(
-                      categoryId: category.id,
-                      categoryName: category.name,
-                    ),
-                  ),
-                );
-
-                /* Navigator.push(
-                  context,
-                  PageRouteBuilder(
-                    transitionDuration: const Duration(
-                      milliseconds: 300,
-                    ), // سرعة الانتقال
-                    pageBuilder: (context, animation, secondaryAnimation) =>
-                        MultiBlocProvider(
-                          providers: [
-                            BlocProvider.value(
-                              value: BlocProvider.of<CategoriesCubit>(context),
-                            ),
-                            BlocProvider.value(
-                              value: BlocProvider.of<SuppliersCubit>(context),
-                            ),
-                          ],
-                          child: CategoryDetailsScreen(
-                            category: category,
-                            suppliers: categorySuppliers,
-                          ),
-                        ),
-                    transitionsBuilder:
-                        (context, animation, secondaryAnimation, child) {
-                          // انميشن التلاشي (Fade) يجعله يبدو احترافياً وسريعاً جداً
-                          return FadeTransition(
-                            opacity: animation,
-                            child: child,
-                          );
-                        },
-                  ),
-                );*/
-              },
-              child: Column(
-                children: [
-                  Expanded(
-                    flex: 4,
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: CustomNetworkImage(
-                        imageUrl: category.imageUrl ?? '',
-                        fit: BoxFit.contain,
-                        errorWidget: const Icon(
-                          Icons.business,
-                          color: Colors.white54,
-                          size: 40,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  SizedBox(
-                    height: 40,
-                    child: Text(
-                      category.name,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                        color: textPrimary,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            );
+            return CategoryCard(category: category);
           },
         ),
 
@@ -626,123 +489,9 @@ class _HomeScreenState extends State<HomeScreen> {
         itemCount: suppliers.length,
         itemBuilder: (context, index) {
           final supplier = suppliers[index];
-          return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SupplierProfileScreen(
-                    supplier: supplier,
-                    heroTag: 'home_supplier_hero_${supplier.id}',
-                  ),
-                ),
-              );
-            },
-            child: Container(
-              margin: const EdgeInsets.only(bottom: 16),
-              decoration: BoxDecoration(
-                color: glassBackground,
-                borderRadius: BorderRadius.circular(defaultBorderRadius),
-                border: Border.all(color: glassBorder),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.1),
-                    blurRadius: 10,
-                    offset: const Offset(0, 5),
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ClipRRect(
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(defaultBorderRadius),
-                    ),
-                    child: Hero(
-                      tag: 'home_supplier_hero_${supplier.id}',
-                      child: CustomNetworkImage(
-                        imageUrl: supplier.logoUrl ?? '',
-                        height: 150,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                        memCacheWidth: 600,
-                        errorWidget: Container(
-                          height: 150,
-                          color: Colors.white10,
-                          child: const Icon(
-                            Icons.store,
-                            size: 50,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                supplier.user?.name ?? 'مورد غير معروف',
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              if (supplier.supplierCategory?.name != null) ...[
-                                const SizedBox(height: 4),
-                                Row(
-                                  children: [
-                                    const Icon(
-                                      Icons.category_outlined,
-                                      size: 14,
-                                      color: textSecondary,
-                                    ),
-                                    const SizedBox(width: 4),
-                                    Text(
-                                      supplier.supplierCategory!.name,
-                                      style: const TextStyle(
-                                        fontSize: 13,
-                                        color: textSecondary,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ],
-                          ),
-                        ),
-                        Row(
-                          children: [
-                            const Icon(
-                              Icons.star,
-                              color: Colors.amber,
-                              size: 20,
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              supplier.rating?.toString() ?? '0.0',
-                              style: const TextStyle(
-                                color: Colors.white70,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          return SupplierCard(
+            supplier: supplier,
+            heroTag: 'home_supplier_hero_${supplier.id}',
           );
         },
       ),
@@ -827,18 +576,25 @@ class _HomeScreenState extends State<HomeScreen> {
                       final cartCubit = context.read<CartCubit>();
                       final pending = cartCubit.pendingCartsCount;
                       final confirmed = cartCubit.confirmedCartsCount;
-                      
-                      if (pending == 0 && confirmed == 0) return const SizedBox();
-                      
+
+                      if (pending == 0 && confirmed == 0)
+                        return const SizedBox();
+
                       return Positioned(
                         top: -10,
                         right: -15,
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 2,
+                          ),
                           decoration: BoxDecoration(
                             color: pending > 0 ? primaryAccent : successColor,
                             borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: secondaryBgColor, width: 2),
+                            border: Border.all(
+                              color: secondaryBgColor,
+                              width: 2,
+                            ),
                           ),
                           child: Text(
                             '$pending | $confirmed',
@@ -995,5 +751,72 @@ class _HomeScreenState extends State<HomeScreen> {
         if (mounted) setState(() => _isAddressPromptOpen = false);
       });
     });
+  }
+}
+
+class _ModernSliderWithIndicator extends StatefulWidget {
+  final List<String> sliderImages;
+  const _ModernSliderWithIndicator({required this.sliderImages});
+
+  @override
+  State<_ModernSliderWithIndicator> createState() => _ModernSliderWithIndicatorState();
+}
+
+class _ModernSliderWithIndicatorState extends State<_ModernSliderWithIndicator> {
+  int _currentIndex = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        CarouselSlider(
+          options: CarouselOptions(
+            height: 180,
+            autoPlay: true,
+            enlargeCenterPage: true,
+            viewportFraction: 0.79,
+            autoPlayInterval: const Duration(seconds: 4),
+            onPageChanged: (index, reason) {
+              setState(() => _currentIndex = index);
+            },
+          ),
+          items: widget.sliderImages.map((imagePath) {
+            return Container(
+              margin: const EdgeInsets.symmetric(horizontal: 6),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: Colors.grey.withValues(alpha: 0.05),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Image.asset(
+                  imagePath,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                ),
+              ),
+            );
+          }).toList(),
+        ),
+        const SizedBox(height: 10),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: widget.sliderImages.asMap().entries.map((entry) {
+            return AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              width: _currentIndex == entry.key ? 18 : 8,
+              height: 8,
+              margin: const EdgeInsets.symmetric(horizontal: 4),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: _currentIndex == entry.key
+                    ? secondaryAccent
+                    : primaryAccent.withValues(alpha: 0.5),
+              ),
+            );
+          }).toList(),
+        ),
+      ],
+    );
   }
 }

@@ -1,0 +1,5 @@
+Analyzing 3 items...                                            
+
+   info - The import of 'dart:ui' is unnecessary because all of the used elements are also provided by the import of 'package:flutter/material.dart' - lib\presentation_layer\screens\wallet_screen.dart:1:8 - unnecessary_import
+
+1 issue found. (ran in 1.5s)
